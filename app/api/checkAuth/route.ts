@@ -4,15 +4,12 @@ import dbConnection from "../db/db";
 
 export async function GET(request: NextRequest) {
   await dbConnection();
-    const authResult = await verifyAuth(request);
   
-    if ('error' in (authResult )) {
-      return authResult; // return 401 response if unauthorized
+  try {
+      const { user } = await verifyAuth(request) as AuthSuccess;
+      return NextResponse.json({ user });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      return NextResponse.json({ error: err.message }, { status: 401 });
     }
-  
-    const { user } = authResult as AuthSuccess; // Type assertion to get user
-  
-    return NextResponse.json({
-      user,
-    });
 }

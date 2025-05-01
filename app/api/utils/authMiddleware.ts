@@ -9,16 +9,14 @@ export async function verifyAuth(request: NextRequest) {
   const tokenCookie = request.cookies.get('token');  
   const token = tokenCookie?.value;
 
-  if (!token) {
-    return NextResponse.json({ error: 'Unauthorized - No Token Provided' }, { status: 401 });
-  }
+  if (!token) throw new Error('Unauthorized - No Token Provided');
 
   let decoded: string | JwtPayload;
   try {
     decoded = jwt.verify(token, process.env.JWT_SECRET as string);
   } catch (error) {
-    console.error('Token verify error:', error);
-    return NextResponse.json({ error: 'Unauthorized - Invalid Token' }, { status: 401 });
+    console.error(error);
+    throw new Error('Unauthorized - Invalid Token');
   }
 
   if (typeof decoded === 'object' && decoded !== null && 'id' in decoded) {
@@ -29,5 +27,5 @@ export async function verifyAuth(request: NextRequest) {
     return { user }; // return the user to the route handler
   }
 
-  return NextResponse.json({ error: 'Unauthorized - Invalid Token' }, { status: 401 });
+  throw new Error('Unauthorized - Invalid Token');
 }
