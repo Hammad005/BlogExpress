@@ -123,6 +123,7 @@ export default function Home() {
     if (editorRef.current) {
       editorRef.current.innerHTML = blogData.blogContent || "";
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // don't include editData.bio here to avoid cursor jump on every keystroke
 
   const handleInput = () => {

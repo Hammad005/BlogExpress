@@ -290,7 +290,6 @@ const Profile = () => {
         <ProfileBlogFeed id={user?._id}/>
 
       </div>
-      {/* {isEndReached && <p className="mt-4 text-green-600">You&apos;ve reached the end of the posts!</p>} */}
     </div>
   );
 }

@@ -85,6 +85,7 @@ const EditBlog: React.FC<EditBlogProps> = ({ params }) => {
         if (editorRef.current) {
           editorRef.current.innerHTML = blogData?.blogContent || "";
         }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
 
     const editorRef = useRef<HTMLDivElement>(null);
