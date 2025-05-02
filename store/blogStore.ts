@@ -96,11 +96,10 @@ export const blogStore = create<BlogStore>((set, get) => ({
     updateBlog: async (blog) => {
         set({ updateBlogLoading: true }); // Set loading to true before the request
         try {
-            console.log({blog});
-            
             await axios.put('/api/editBlog', {blog})
             toast.success("Blog updated successfully!");
             set({ updateBlogLoading: false }); // Set loading to false after the request
+            get().fetchBlogs(); // Fetch blogs after deleting one
         } catch (error) {
             const err = error as AxiosError;
             console.log(err.response?.data.error || err.response?.data.message || "An error occurred");
