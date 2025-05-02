@@ -59,48 +59,48 @@ const Profile = () => {
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null)
   const [openAlert, setOpenAlert] = useState(false)
   const handlePictureChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-  
-    // ✅ Validate file size
-    if (file.size > 2.5 * 1024 * 1024) {
-      toast.warning("File size exceeds 2.5MB. Please choose a smaller file.");
-      return;
-    }
-  
-    // ✅ Validate image type
-    if (!file.type.startsWith("image/")) {
-      toast.warning("Only image files are allowed.");
-      return;
-    }
-  
-    try {
-      const reader = new FileReader();
-  
-      reader.onload = async () => {
-        const base64Image = reader.result as string;
-  
-        try {
-          await updateProfilePic({ profilePics: base64Image });
-          toast.success("Profile picture uploaded successfully!");
-        } catch (error) {
-          toast.error("Failed to upload profile picture.");
-          console.error("Upload error:", error);
-        }
-      };
-  
-      reader.onerror = () => {
-        toast.error("Failed to read the image.");
-        console.error("FileReader error:", reader.error);
-      };
-  
-      reader.readAsDataURL(file);
-    } catch (err) {
-      toast.error("Unexpected error during image handling.");
-      console.error("Error:", err);
-    }
-  };
-  
+  const file = e.target.files?.[0];
+  if (!file) return;
+
+  // ✅ Validate file size
+  if (file.size > 2.5 * 1024 * 1024) {
+    toast.warning("File size exceeds 2.5MB. Please choose a smaller file.");
+    return;
+  }
+
+  // ✅ Validate image type
+  if (!file.type.startsWith("image/")) {
+    toast.warning("Only image files are allowed.");
+    return;
+  }
+
+  try {
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      const base64Image = reader.result as string;
+
+      try {
+        await updateProfilePic({ profilePics: base64Image });
+        toast.success("Profile picture uploaded successfully!");
+      } catch (error) {
+        toast.error("Failed to upload profile picture.");
+        console.error("Upload error:", error);
+      }
+    };
+
+    reader.onerror = () => {
+      toast.error("Failed to read the image.");
+      console.error("FileReader error:", reader.error);
+    };
+
+    reader.readAsDataURL(file);
+  } catch (err) {
+    toast.error("Unexpected error during image handling.");
+    console.error("Error:", err);
+  }
+};
+
 
   const handleDeletePhoto = async () => {
     if (selectedPhoto) {

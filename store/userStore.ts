@@ -1,6 +1,7 @@
 import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
+import { blogStore } from "./blogStore";
 
 interface User {
     _id: object;
@@ -181,6 +182,7 @@ export const userStore = create<UserStore>((set) => ({
             const response = await axios.put<{ user: User }>('api/uploadProfile',  profilePics );
             set({ user: response.data.user, successLoading: false }); // Update user and set loading to false
             toast.success("Profile updated successfully!"); // Show success message
+            blogStore.getState().fetchBlogs(); // Fetch blogs after updating profile
         }catch (error: unknown) {
             let errorMessage: string;
         
@@ -201,6 +203,7 @@ export const userStore = create<UserStore>((set) => ({
             const response = await axios.put<{ user: User }>(`api/deleteProfilePic`, {id});
             set({ user: response.data.user, deletePhotoLoading: false }); // Update user and set loading to false
             toast.success("Photo deleted successfully!"); // Show success message
+            blogStore.getState().fetchBlogs(); // Fetch blogs after updating profile
         }catch (error: unknown) {
             let errorMessage: string;
         
