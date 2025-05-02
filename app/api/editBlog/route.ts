@@ -8,14 +8,10 @@ export async function PUT(req: NextRequest) {
   await dbConnection();
   const authResult = await verifyAuth(req);
 
-  if ('error' in authResult) {
-    return authResult;
-  }
 
   const { user } = authResult as AuthSuccess;
 
   const { blog } = await req.json();
-  console.log(blog);
   
   if (blog?.blogOwner._id !== user.id) {
     return NextResponse.json({ error: "You are not authorized to edit this blog!" }, { status: 403 });

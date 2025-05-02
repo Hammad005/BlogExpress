@@ -8,9 +8,6 @@ export async function POST(req: NextRequest) {
 
   const { email } = await req.json();
   const authResult = await verifyAuth(req);
-  if ('error' in (authResult)) {
-    return authResult; // return 401 response if unauthorized
-  }
   const { user } = authResult as AuthSuccess;
   if (user.email === email) {
     return NextResponse.json(

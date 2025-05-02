@@ -9,10 +9,6 @@ export async function POST(req: NextRequest) {
     await dbConnection();
     const authResult = await verifyAuth(req);
 
-    if ('error' in authResult) {
-        return authResult;
-    }
-
     const { user } = authResult as AuthSuccess;
     const { blogPics, blogContent, blogCategory } = await req.json(); // Expecting an array of pictures
     const uploadedPics = await Promise.all(blogPics.map((pic: string) => cloudinary.uploader.upload(pic, {

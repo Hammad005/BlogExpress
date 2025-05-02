@@ -8,10 +8,6 @@ export async function PUT(req: NextRequest) {
   await dbConnection();
   const authResult = await verifyAuth(req);
 
-  if ('error' in authResult) {
-    return authResult;
-  }
-
   const { user } = authResult as AuthSuccess;
 
   const { name, email, bio } = await req.json();

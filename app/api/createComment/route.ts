@@ -8,10 +8,6 @@ export async function POST(req: NextRequest) {
     await dbConnection();
     const authResult = await verifyAuth(req);
 
-    if ('error' in authResult) {
-        return authResult;
-    }
-
     const { user } = authResult as AuthSuccess;
     const { blogOwner, commentBlog, comment } = await req.json(); // Expecting an array of pictures
     
