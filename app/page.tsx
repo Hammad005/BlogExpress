@@ -34,9 +34,9 @@ import { likeStore } from "@/store/likeStore";
 
 
 export default function Home() {
-  const { createBlog, blogLoading, fetchBlogs, fetchBlogLoading } = blogStore()
+  const { createBlog, blogLoading, fetchBlogLoading } = blogStore()
   const router = useRouter()
-  const { user, getAllUsers } = userStore()
+  const { user } = userStore()
   const handleGoToProfile = () => {
     router.push('/profile');
   }
@@ -113,13 +113,6 @@ export default function Home() {
 
     editor.focus();
   };
-
-  useEffect(() => {
-    getAllUsers()
-    fetchBlogs()
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   useEffect(() => {
     if (editorRef.current) {
