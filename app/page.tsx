@@ -31,7 +31,7 @@ import { blogStore } from "@/store/blogStore";
 import BlogFeed from "@/components/BlogFeed";
 import { commentStore } from "@/store/commentStore";
 import { likeStore } from "@/store/likeStore";
-
+import imageCompression from "browser-image-compression";
 
 export default function Home() {
   const { createBlog, blogLoading, fetchBlogLoading } = blogStore()
@@ -128,48 +128,49 @@ export default function Home() {
     }
   };
 
-  const handleBlogPics = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBlogPics = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    const maxFileSize = 2.5 * 1024 * 1024; // 2.5 MB in bytes
-
+    const maxFileSize = 2.5 * 1024 * 1024;
+  
     if (!files || files.length === 0) return;
-
+  
     const validFiles: File[] = [];
     const invalidFiles: string[] = [];
-
+  
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-
       if (file.size > maxFileSize) {
         invalidFiles.push(file.name);
       } else {
         validFiles.push(file);
       }
     }
-
+  
     if (invalidFiles.length > 0) {
       toast.warning(`The following files exceed the 2.5 MB size limit: ${invalidFiles.join(", ")}`);
     }
-
-    if (validFiles.length + blogData.blogPics.length > 6) {
+  
+    const totalFiles = blogData.blogPics.length + validFiles.length;
+    if (totalFiles > 6) {
       toast.warning("You can upload a maximum of 6 images.");
       return;
     }
-
-    const fileReaders: Promise<string>[] = validFiles.map((file) => {
-      const reader = new FileReader();
-      return new Promise<string>((resolve) => {
-        reader.onload = () => resolve(reader.result as string);
-        reader.readAsDataURL(file);
-      });
-    });
-
-    Promise.all(fileReaders).then((base64Images) => {
-      setBlogData((prevData) => ({
-        ...prevData,
-        blogPics: [...prevData.blogPics, ...base64Images],
-      }));
-    });
+  
+    const compressedAndEncodedImages = await Promise.all(
+      validFiles.map(async (file) => {
+        const compressed = await imageCompression(file, {
+          maxSizeMB: 1, // compress under 1MB
+          maxWidthOrHeight: 1024,
+          useWebWorker: true,
+        });
+        return await imageCompression.getDataUrlFromFile(compressed);
+      })
+    );
+  
+    setBlogData((prevData) => ({
+      ...prevData,
+      blogPics: [...prevData.blogPics, ...compressedAndEncodedImages],
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
