@@ -42,6 +42,7 @@ import {
 
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import ProfileBlogFeed from '@/components/ProfileBlogFeed';
+import { toast } from 'sonner';
 
 
 const Profile = () => {
@@ -60,13 +61,45 @@ const Profile = () => {
   const handlePictureChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+  
+    // Optional: Check file type
+    if (!file.type.startsWith("image/")) {
+      toast.warning("Please upload a valid image file.");
+      return;
+    }
+  
+    // Optional: Limit file size (e.g., 2MB)
+    const maxSizeMB = 2;
+    if (file.size > maxSizeMB * 1024 * 1024) {
+      toast.warning(`Image size should be under ${maxSizeMB}MB.`);
+      return;
+    }
+  
     const reader = new FileReader();
-    reader.readAsDataURL(file);
+  
     reader.onload = async () => {
       const base64Image = reader.result as string;
-      await updateProfilePic({ profilePics: base64Image })
+      try {
+        await updateProfilePic({ profilePics: base64Image });
+      } catch (error) {
+        toast.error("Failed to update profile picture.");
+        console.error("Upload error:", error);
+      }
+    };
+  
+    reader.onerror = () => {
+      toast.error("Failed to read image.");
+      console.error("FileReader error:", reader.error);
+    };
+  
+    try {
+      reader.readAsDataURL(file);
+    } catch (err) {
+      toast.error("Unexpected error while reading file.");
+      console.error("readAsDataURL error:", err);
     }
   };
+  
 
   const handleDeletePhoto = async () => {
     if (selectedPhoto) {
