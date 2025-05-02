@@ -233,7 +233,7 @@ const EditBlog: React.FC<EditBlogProps> = ({ params }) => {
                                                     ref={editorRef}
                                                     contentEditable
                                                     suppressContentEditableWarning
-                                                    className="px-3 py-2 editor-content focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50 min-h-20 w-full rounded p-2 outline-none border-none whitespace-pre-wrap break-words"
+                                                    className={`px-3 py-2 editor-content focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50 min-h-20 w-full rounded p-2 outline-none border-none whitespace-pre-wrap break-words ${updateBlogLoading && "pointer-events-none"}`}
                                                     aria-label="Blog content editor"
                                                     onInput={handleInput}
                                                 ></div>
@@ -247,6 +247,7 @@ const EditBlog: React.FC<EditBlogProps> = ({ params }) => {
                                                             className="size-7"
                                                             type="button"
                                                             onClick={() => execCommand("bold")}
+                                                            disabled={updateBlogLoading}
                                                         >
                                                             <Bold />
                                                         </Button>
@@ -256,6 +257,7 @@ const EditBlog: React.FC<EditBlogProps> = ({ params }) => {
                                                             className="size-7"
                                                             type="button"
                                                             onClick={() => execCommand("italic")}
+                                                            disabled={updateBlogLoading}
                                                         >
                                                             <Italic />
                                                         </Button>
@@ -265,6 +267,7 @@ const EditBlog: React.FC<EditBlogProps> = ({ params }) => {
                                                             className="size-7"
                                                             type="button"
                                                             onClick={() => execCommand("underline")}
+                                                            disabled={updateBlogLoading}
                                                         >
                                                             <Underline />
                                                         </Button>
@@ -276,6 +279,7 @@ const EditBlog: React.FC<EditBlogProps> = ({ params }) => {
                                                                     className="size-7"
                                                                     type="button"
                                                                     onClick={saveSelection}
+                                                                    disabled={updateBlogLoading}
                                                                 >
                                                                     <Link2 />
                                                                 </Button>
@@ -307,7 +311,7 @@ const EditBlog: React.FC<EditBlogProps> = ({ params }) => {
                                                                 </div>
                                                                 <DialogFooter>
                                                                     <Button type="submit" onClick={handleLink}>
-                                                                        Save changes
+                                                                        Add URL
                                                                     </Button>
                                                                 </DialogFooter>
                                                             </DialogContent>
@@ -318,6 +322,7 @@ const EditBlog: React.FC<EditBlogProps> = ({ params }) => {
                                                             onValueChange={(value) => {
                                                                 execCommand("formatBlock", value);
                                                             }}
+                                                            disabled={updateBlogLoading}
                                                         >
                                                             <SelectTrigger className="w-full">
                                                                 <SelectValue placeholder="Headings" />
@@ -343,6 +348,7 @@ const EditBlog: React.FC<EditBlogProps> = ({ params }) => {
                                                                 setBlogData((prevData) => prevData ? { ...prevData, blogCategory: value } : undefined)
                                                             }
                                                             defaultValue={blog?.blogCategory}
+                                                            disabled={updateBlogLoading}
                                                         >
                                                             <SelectTrigger className="w-full">
                                                                 <SelectValue placeholder="Category" />

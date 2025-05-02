@@ -301,7 +301,7 @@ export default function Home() {
                           ref={editorRef}
                           contentEditable
                           suppressContentEditableWarning
-                          className="px-3 py-2 editor-content focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50 min-h-20 w-full rounded p-2 outline-none border-none whitespace-pre-wrap break-words"
+                          className={`px-3 py-2 editor-content focus-visible:ring-0 disabled:cursor-not-allowed disabled:opacity-50 min-h-20 w-full rounded p-2 outline-none border-none whitespace-pre-wrap break-words ${blogLoading && "pointer-events-none"}`}
                           aria-label="Blog content editor"
                           onInput={handleInput}
                         ></div>
@@ -312,6 +312,7 @@ export default function Home() {
                             variant="outline"
                             className="m-2"
                             type="button"
+                            disabled={blogLoading}
                             onClick={() => openImageInput.current?.click()}
                           >
                             <BookImage /> Upload Images
@@ -330,7 +331,7 @@ export default function Home() {
                                 </div>
                                 <div className="absolute inset-y-0 right-0">
                                   <div
-                                    className={`size-4 rounded-full bg-primary border flex items-center justify-center border-primary/50 hover:bg-primary/50 cursor-pointer ${blogLoading && "cursor-not-allowed"}`}
+                                    className={`size-4 rounded-full bg-primary border flex items-center justify-center border-primary/50 hover:bg-primary/50 cursor-pointer ${blogLoading && "pointer-events-none"}`}
                                     onClick={() => {
                                       setBlogData((prevData) => ({
                                         ...prevData,
@@ -354,6 +355,7 @@ export default function Home() {
                               className="size-7"
                               type="button"
                               onClick={() => execCommand("bold")}
+                              disabled={blogLoading}
                             >
                               <Bold />
                             </Button>
@@ -363,6 +365,7 @@ export default function Home() {
                               className="size-7"
                               type="button"
                               onClick={() => execCommand("italic")}
+                              disabled={blogLoading}
                             >
                               <Italic />
                             </Button>
@@ -372,6 +375,7 @@ export default function Home() {
                               className="size-7"
                               type="button"
                               onClick={() => execCommand("underline")}
+                              disabled={blogLoading}
                             >
                               <Underline />
                             </Button>
@@ -383,6 +387,7 @@ export default function Home() {
                                   className="size-7"
                                   type="button"
                                   onClick={saveSelection}
+                                  disabled={blogLoading}
                                 >
                                   <Link2 />
                                 </Button>
@@ -403,7 +408,7 @@ export default function Home() {
                                   </div>
                                 </div>
                                 <DialogFooter>
-                                  <Button type="submit" onClick={handleLink}>Save changes</Button>
+                                  <Button type="submit" onClick={handleLink}>Add URL</Button>
                                 </DialogFooter>
                               </DialogContent>
                             </Dialog>
@@ -411,7 +416,9 @@ export default function Home() {
                           <div className="flex flex-col gap-2">
                             <Select onValueChange={(value) => {
                               execCommand("formatBlock", value);
-                            }}>
+                            }}
+                            disabled={blogLoading}
+                            >
                               <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Headings" />
                               </SelectTrigger>
@@ -428,7 +435,9 @@ export default function Home() {
                                 ...prevData,
                                 blogCategory: value,
                               }))
-                            }>
+                            }
+                            disabled={blogLoading}
+                            >
                               <SelectTrigger className="w-full">
                                 <SelectValue placeholder="Category" />
                               </SelectTrigger>
@@ -450,6 +459,7 @@ export default function Home() {
                       multiple
                       ref={openImageInput}
                       onChange={handleBlogPics}
+                      disabled={blogLoading}
                       accept='image/jpeg, image/png'
                       hidden />
                     <input type="submit" ref={submitButton} hidden />
