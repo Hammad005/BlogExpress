@@ -42,6 +42,7 @@ import {
 
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import ProfileBlogFeed from '@/components/ProfileBlogFeed';
+import { toast } from 'sonner';
 
 
 const Profile = () => {
@@ -60,12 +61,18 @@ const Profile = () => {
   const handlePictureChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (file.size > 2.5 * 1024 * 1024) {
+      toast.warning("File size exceeds 2.5MB. Please choose a smaller file.");
+      return;
+    }
+
     const reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = async () => {
       const base64Image = reader.result as string;
-      await updateProfilePic({ profilePics: base64Image })
-    }
+      await updateProfilePic({ profilePics: base64Image });
+    };
   };
 
   const handleDeletePhoto = async () => {

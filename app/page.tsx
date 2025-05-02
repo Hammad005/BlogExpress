@@ -130,31 +130,39 @@ export default function Home() {
 
   const handleBlogPics = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (files && files.length > 6) {
-      toast.warning("You can upload a maximum of 6 images.");
-      return;
-    }
-    if (blogData.blogPics.length + (files ? files.length : 0) > 6) {
-      toast.warning("You can upload a maximum of 6 images.");
-      return;
-    }
+    const maxFileSize = 2.5 * 1024 * 1024; // 2.5 MB in bytes
+
     if (!files || files.length === 0) return;
 
-    const fileReaders: Promise<string>[] = [];
+    const validFiles: File[] = [];
+    const invalidFiles: string[] = [];
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-      const reader = new FileReader();
 
-      const filePromise = new Promise<string>((resolve) => {
-        reader.onload = () => {
-          resolve(reader.result as string);
-        };
+      if (file.size > maxFileSize) {
+        invalidFiles.push(file.name);
+      } else {
+        validFiles.push(file);
+      }
+    }
+
+    if (invalidFiles.length > 0) {
+      toast.warning(`The following files exceed the 2.5 MB size limit: ${invalidFiles.join(", ")}`);
+    }
+
+    if (validFiles.length + blogData.blogPics.length > 6) {
+      toast.warning("You can upload a maximum of 6 images.");
+      return;
+    }
+
+    const fileReaders: Promise<string>[] = validFiles.map((file) => {
+      const reader = new FileReader();
+      return new Promise<string>((resolve) => {
+        reader.onload = () => resolve(reader.result as string);
         reader.readAsDataURL(file);
       });
-
-      fileReaders.push(filePromise);
-    }
+    });
 
     Promise.all(fileReaders).then((base64Images) => {
       setBlogData((prevData) => ({
