@@ -211,7 +211,7 @@ export default function Home() {
       <div className="max-w-4xl mx-auto p-6">
         <div className="space-y-6">
           <h1 className="text-xl md:text-2xl font-bold text-center text-accent-foreground/40 dark:text-neutral-50 text-shadow-lg">Welcome to <span className="text-primary animate-pulse">BlogExpress</span></h1>
-          {user && <>
+          {user?._id && <>
             <div className="border rounded-full p-4 min-h-20 flex items-center justify-between shadow-xl dark:shadow-2xl dark:shadow-primary/10">
 
               {user?.profilePics?.[0]?.profileImage ?
