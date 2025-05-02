@@ -11,15 +11,16 @@ const CheckAuth = ({
       const { checkAuth, getAllUsers } = userStore()
       const { fetchBlogs } = blogStore()
     
-    useEffect(() => {
-        checkAuth();
-    }, [checkAuth])
-    
-    useEffect(() => {
-        getAllUsers()
-        fetchBlogs()
+      useEffect(() => {
+        const init = async () => {
+          await checkAuth();
+          await getAllUsers();
+          await fetchBlogs();
+        };
+        init();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [])
+      }, []);
+      
 
     return (
         <>
