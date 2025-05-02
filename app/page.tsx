@@ -130,59 +130,39 @@ export default function Home() {
 
   const handleBlogPics = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    if (!files || files.length === 0) return;
-  
-    const totalFiles = blogData.blogPics.length + files.length;
-    if (totalFiles > 6) {
+    if (files && files.length > 6) {
       toast.warning("You can upload a maximum of 6 images.");
       return;
     }
-  
+    if (blogData.blogPics.length + (files ? files.length : 0) > 6) {
+      toast.warning("You can upload a maximum of 6 images.");
+      return;
+    }
+    if (!files || files.length === 0) return;
+
     const fileReaders: Promise<string>[] = [];
-  
+
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
-  
-      // Optional: Skip non-image files
-      if (!file.type.startsWith("image/")) {
-        toast.warning("Only image files are allowed.");
-        continue;
-      }
-  
-      const filePromise = new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-  
+      const reader = new FileReader();
+
+      const filePromise = new Promise<string>((resolve) => {
         reader.onload = () => {
           resolve(reader.result as string);
         };
-  
-        reader.onerror = () => {
-          toast.error(`Failed to read file: ${file.name}`);
-          reject(new Error("File reading failed"));
-        };
-  
-        try {
-          reader.readAsDataURL(file);
-        } catch (err) {
-          reject(err);
-        }
+        reader.readAsDataURL(file);
       });
-  
+
       fileReaders.push(filePromise);
     }
-  
-    Promise.all(fileReaders)
-      .then((base64Images) => {
-        setBlogData((prevData) => ({
-          ...prevData,
-          blogPics: [...prevData.blogPics, ...base64Images],
-        }));
-      })
-      .catch((err) => {
-        console.error("Error reading files:", err);
-      });
+
+    Promise.all(fileReaders).then((base64Images) => {
+      setBlogData((prevData) => ({
+        ...prevData,
+        blogPics: [...prevData.blogPics, ...base64Images],
+      }));
+    });
   };
-  
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
