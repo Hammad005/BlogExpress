@@ -117,7 +117,9 @@ export default function Home() {
   useEffect(() => {
     getAllUsers()
     fetchBlogs()
-  }, [getAllUsers, fetchBlogs])
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (editorRef.current) {
@@ -196,11 +198,12 @@ export default function Home() {
   const { fetchComments, } = commentStore();
   const { fetchLikes } = likeStore();
   useEffect(() => {
-    if (user) {
+    if (user && user?._id) {
       fetchComments()
       fetchLikes()
     }
-  },[user, fetchComments, fetchLikes])
+  }, [user, fetchComments, fetchLikes])
+  
 
 
   return (
