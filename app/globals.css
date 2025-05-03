@@ -139,25 +139,32 @@ html {
 }
 
 .editor-content h1 {
-  @apply text-4xl font-bold;
+  @apply text-3xl font-bold;
 }
 
 .editor-content h2 {
-  @apply text-3xl font-semibold;
-}
-
-.editor-content h3 {
   @apply text-2xl font-semibold;
 }
 
+.editor-content h3 {
+  @apply text-xl font-semibold;
+}
+
 .editor-content h4 {
-  @apply text-xl font-medium;
+  @apply text-lg font-medium;
 }
 
 .editor-content h5 {
-  @apply text-lg font-medium;
+  @apply text-lg font-normal;
 }
 
 .editor-content h6 {
   @apply text-base font-normal;
+}
+
+.editor-content p {
+  @apply md:text-base text-sm font-normal;
+}
+.editor-content div {
+  @apply md:text-base text-sm font-normal;
 }
