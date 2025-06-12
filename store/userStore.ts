@@ -68,7 +68,7 @@ export const userStore = create<UserStore>((set) => ({
     checkAuth: async () => {
         set({ checkingAuth: true }); // Set loading to true before the request
         try {
-            const response = await axios.get('api/checkAuth');
+            const response = await axios.get('/api/checkAuth');
             set({ user: response.data.user, checkingAuth: false }); // Update user and set loading to false
         } catch (error) {
             console.log(error);
@@ -79,7 +79,7 @@ export const userStore = create<UserStore>((set) => ({
     signup: async (data) => {
         set({ loading: true }); // Set loading to true before the request
         try {
-            const response = await axios.post<{ user: User }>('api/signup',  data );
+            const response = await axios.post<{ user: User }>('/api/signup',  data );
             set({ user: response.data.user, loading: false }); // Update user and set loading to false
             toast.success("Signup successful!"); // Show success message
         }catch (error: unknown) {
@@ -99,7 +99,7 @@ export const userStore = create<UserStore>((set) => ({
     login: async (data) => {
         set({ loading: true }); // Set loading to true before the request
         try {
-            const response = await axios.post<{ user: User }>('api/login',  data );
+            const response = await axios.post<{ user: User }>('/api/login',  data );
             set({ user: response.data.user, loading: false }); // Update user and set loading to false
             toast.success("Login successful!"); // Show success message
         }catch (error: unknown) {
@@ -159,7 +159,7 @@ export const userStore = create<UserStore>((set) => ({
     updateProfile: async (data) => {
         set({ successLoading: true }); // Set loading to true before the request
         try {
-            const response = await axios.put<{ user: User }>('api/editProfile',  data );
+            const response = await axios.put<{ user: User }>('/api/editProfile',  data );
             set({ user: response.data.user, successLoading: false }); // Update user and set loading to false
             toast.success("Profile updated successfully!"); // Show success message
         }catch (error: unknown) {
@@ -179,7 +179,7 @@ export const userStore = create<UserStore>((set) => ({
     updateProfilePic: async (profilePics) => {
         set({ successLoading: true }); // Set loading to true before the request
         try {
-            const response = await axios.put<{ user: User }>('api/uploadProfile',  profilePics );
+            const response = await axios.put<{ user: User }>('/api/uploadProfile',  profilePics );
             set({ user: response.data.user, successLoading: false }); // Update user and set loading to false
             toast.success("Profile updated successfully!"); // Show success message
             blogStore.getState().fetchBlogs(); // Fetch blogs after updating profile
@@ -200,7 +200,7 @@ export const userStore = create<UserStore>((set) => ({
     deletePhoto: async (id) => {
         set({ deletePhotoLoading: true }); // Set loading to true before the request
         try {
-            const response = await axios.put<{ user: User }>(`api/deleteProfilePic`, {id});
+            const response = await axios.put<{ user: User }>(`/api/deleteProfilePic`, {id});
             set({ user: response.data.user, deletePhotoLoading: false }); // Update user and set loading to false
             toast.success("Photo deleted successfully!"); // Show success message
             blogStore.getState().fetchBlogs(); // Fetch blogs after updating profile
