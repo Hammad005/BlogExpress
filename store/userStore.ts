@@ -119,7 +119,7 @@ export const userStore = create<UserStore>((set) => ({
     logout: async () => {
         set({ loading: true }); // Set loading to true before the request
         try {
-            await axios.post('api/logout'); // Call the logout API
+            await axios.post('/api/logout'); // Call the logout API
             set({ user: null, loading: false }); // Clear user and set loading to false
             toast.success("Logout successful!"); // Show success message
         } catch (error: unknown) {
